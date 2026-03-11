@@ -4,25 +4,32 @@
     <meta charset="UTF-8">
     <title>8.6 신력 달력</title>
     <div id="new-era-calendar-root">
-    <style>#new-era-calendar-root{all:initial;display:block;font-family:'Pretendard',sans-serif;max-width:500px;margin:20px auto;background:#f1f2f6;padding:12px;border-radius:24px}#new-era-calendar-root .calendar{background:#fff;border-radius:20px;box-shadow:0 12px 30px rgb(0 0 0 / .12);overflow:hidden}#new-era-calendar-root .nav{background:#2f3542;color:#fff;padding:15px 25px;display:flex;flex-direction:column;align-items:center;gap:10px}#new-era-calendar-root .nav-top{display:flex;width:100%;justify-content:space-between;align-items:center}#new-era-calendar-root .nav h2{margin:0;font-size:1.5rem;font-weight:700;color:#fff}#new-era-calendar-root .ah-display{font-size:.95rem;color:#ff4757;font-weight:700;background:rgb(255 255 255 / .1);padding:4px 12px;border-radius:20px}#new-era-calendar-root .nav button{background:rgb(255 255 255 / .15);border:1px solid rgb(255 255 255 / .4);color:#fff;padding:6px 14px;cursor:pointer;border-radius:10px;font-size:.85rem}#new-era-calendar-root .grid{display:grid;grid-template-columns:repeat(7,1fr);padding:15px}#new-era-calendar-root .day-label{text-align:center;font-weight:700;color:#a4b0be;font-size:.85rem;padding-bottom:10px}#new-era-calendar-root .cell{height:85px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;border-radius:12px}#new-era-calendar-root .solar-num{font-size:1.3rem;font-weight:700;color:#2f3542}#new-era-calendar-root .new-era-num{font-size:.85rem;color:#57606f;margin-top:5px}#new-era-calendar-root .grid div:nth-child(7n+1) .solar-num{color:#ff4757}#new-era-calendar-root .grid div:nth-child(7n) .solar-num{color:#1e90ff}#new-era-calendar-root .is-new-year{background:#fff0f0!important}#new-era-calendar-root .is-new-year .new-era-num{color:#ff4757;font-weight:700}#new-era-calendar-root .dim{opacity:.2}#new-era-calendar-root .today{border:2px solid #2f3542}</style>
+    <link href='https://tistory1.daumcdn.net/tistory/752377/skin/images/raelinfo-calendar-newyear-2026-03-11.css' rel='stylesheet'/>
 </head>
 <body>
 
-<div class="calendar">
-    <div class="nav">
-        <div class="nav-top">
-            <button id="nec-prevMonth">이전</button>
-            <h2 id="nec-monthDisplay"></h2>
-            <button id="nec-nextMonth">다음</button>
+<div id="new-era-calendar-root">
+    <div class="calendar">
+        <div class="nav">
+            <div class="nav-top">
+                <button id="nec-prevMonth">이전</button>
+                <h2 id="nec-monthDisplay"></h2>
+                <button id="nec-nextMonth">다음</button>
+            </div>
+            <div id="nec-ahDisplay" class="ah-display"></div>
         </div>
-        <div id="nec-ahDisplay" class="ah-display"></div>
+        <div class="grid" id="nec-grid">
+            <div class="day-label">일</div><div class="day-label">월</div><div class="day-label">화</div>
+            <div class="day-label">수</div><div class="day-label">목</div><div class="day-label">금</div><div class="day-label">토</div>
+        </div>
     </div>
-    <div class="grid" id="nec-grid">
-        <div class="day-label">일</div><div class="day-label">월</div><div class="day-label">화</div>
-        <div class="day-label">수</div><div class="day-label">목</div><div class="day-label">금</div><div class="day-label">토</div>
-    </div>
-</div>
 
-<script>(function(){let viewDate=new Date();function getCorrectNewEra(date){const y=date.getFullYear();let refDate=new Date(y,7,6);if(date<refDate)refDate=new Date(y-1,7,6);const diffInMs=date.getTime()-refDate.getTime();const diffInDays=Math.floor(diffInMs/(1000*60*60*24));const daysInMonths=[31,30,31,30,31,31,28,31,30,31,30,31];const checkYear=refDate.getFullYear()+(refDate.getMonth()>=7?1:0);const isLeap=(checkYear%4===0&&checkYear%100!==0)||(checkYear%400===0);if(isLeap)daysInMonths[6]=29;let remainingDays=diffInDays;let m=0;while(m<12&&remainingDays>=daysInMonths[m]){remainingDays-=daysInMonths[m];m++}let ahYear=refDate.getFullYear()-1945;return{month:m+1,day:remainingDays+1,isNewYear:diffInDays===0,ahYear:ahYear}}function render(){const grid=document.getElementById('nec-grid');const display=document.getElementById('nec-monthDisplay');const ahDisplay=document.getElementById('nec-ahDisplay');const labels=grid.querySelectorAll('.day-label');grid.innerHTML='';labels.forEach(l=>grid.appendChild(l));const y=viewDate.getFullYear();const m=viewDate.getMonth();display.innerText=y+"."+String(m+1).padStart(2,'0');const firstDayDate=new Date(y,m,1);const headerInfo=getCorrectNewEra(firstDayDate);ahDisplay.innerText="AH "+headerInfo.ahYear+"년";const firstDay=new Date(y,m,1).getDay();const startDate=new Date(y,m,1-firstDay);for(let i=0;i<42;i++){const curr=new Date(startDate);curr.setDate(startDate.getDate()+i);const cell=document.createElement('div');cell.className='cell';if(curr.getMonth()!==m)cell.classList.add('dim');if(curr.toDateString()===new Date().toDateString())cell.classList.add('today');const newEra=getCorrectNewEra(curr);if(newEra.isNewYear)cell.classList.add('is-new-year');cell.innerHTML='<span class="solar-num">'+curr.getDate()+'</span>'+'<span class="new-era-num">'+newEra.month+'.'+newEra.day+'</span>';grid.appendChild(cell)}}document.getElementById('nec-prevMonth').onclick=function(){viewDate.setMonth(viewDate.getMonth()-1);render()};document.getElementById('nec-nextMonth').onclick=function(){viewDate.setMonth(viewDate.getMonth()+1);render()};render()})()</script>
+    <div class="event-list" id="nec-eventList">
+        <h3 id="nec-eventTitle">이달의 기념일</h3>
+        <div id="nec-eventItems"></div>
+    </div>
+
+    <script src='https://tistory1.daumcdn.net/tistory/752377/skin/images/raelinfo-calendar-newyear-2026-03-11.js' type='text/javascript'></script>
+</div>
 </body>
 </html>
