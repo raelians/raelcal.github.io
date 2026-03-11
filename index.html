@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>8.6 신력 달력 - 수정판</title>
+    <title>8.6 신력 달력</title>
     <style>
         :root { --new-year: #ff4757; --accent: #2f3542; }
         body { font-family: 'Pretendard', sans-serif; display: flex; justify-content: center; padding: 40px; background: #f1f2f6; }
@@ -104,7 +104,7 @@
 
             cell.innerHTML = `
                 <span class="solar-num">${curr.getDate()}</span>
-                <span class="new-era-num">aH. ${newEra.month}.${newEra.day}</span>
+                <span class="new-era-num">aH ${newEra.month}.${newEra.day}</span>
             `;
             grid.appendChild(cell);
         }
