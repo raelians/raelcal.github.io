@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>JS 음력 달력</title>
+    <style>
+        :root { --border: #e0e0e0; --sun: #ff4d4d; --sat: #4d79ff; }
+        body { font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; padding: 20px; }
+        .calendar { width: 350px; border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        
+        .nav { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid var(--border); }
+        .nav button { cursor: pointer; border: none; background: #eee; padding: 5px 10px; border-radius: 4px; }
+        
+        .grid { display: grid; grid-template-columns: repeat(7, 1fr); }
+        .header { font-size: 0.8em; font-weight: bold; padding: 10px 0; background: #f9f9f9; text-align: center; border-bottom: 1px solid var(--border); }
+        
+        .cell { height: 70px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 4px; position: relative; }
+        .cell:nth-child(7n) { border-right: none; color: var(--sat); }
+        .cell:nth-child(7n+1) { color: var(--sun); }
+        
+        .solar-day { font-size: 1.1em; font-weight: bold; }
+        .lunar-day { font-size: 0.75em; color: #777; display: block; margin-top: 4px; }
+        .dim { opacity: 0.3; }
+        .today { background-color: #fff9db; }
+    </style>
+</head>
+<body>
+
+<div class="calendar">
+    <div class="nav">
+        <button id="prevBtn">이전</button>
+        <h3 id="monthTitle"></h3>
+        <button id="nextBtn">다음</button>
+    </div>
+    <div class="grid" id="calendarGrid">
+        <div class="header">일</div><div class="header">월</div><div class="header">화</div>
+        <div class="header">수</div><div class="header">목</div><div class="header">금</div><div class="header">토</div>
+    </div>
+</div>
+
+<script>
+    let viewDate = new Date();
+
+    // 핵심: 양력을 음력 문자열로 변환하는 순수 JS 함수
+    function getLunarText(date) {
+        const formatter = new Intl.DateTimeFormat('ko-KR-u-ca-chinese', {
+            month: 'numeric', day: 'numeric'
+        });
+        // 결과 예시: "음력 1. 23" -> "1.23"으로 가공
+        return formatter.format(date).replace(/[^0-9.]/g, '');
+    }
+
+    function render() {
+        const grid = document.getElementById('calendarGrid');
+        const title = document.getElementById('monthTitle');
+        
+        // 기존 날짜 제거
+        const cells = document.querySelectorAll('.cell');
+        cells.forEach(c => c.remove());
+
+        const year = viewDate.getFullYear();
+        const month = viewDate.getMonth();
+        title.innerText = `${year}년 ${month + 1}월`;
+
+        // 이번 달 1일의 요일과 마지막 날짜 계산
+        const firstDay = new Date(year, month, 1).getDay();
+        const lastDate = new Date(year, month + 1, 0).getDate();
+        
+        // 달력 칸 채우기 (전월 일부 + 본월 + 익월 일부)
+        const startDay = new Date(year, month, 1 - firstDay);
+        
+        for (let i = 0; i < 42; i++) {
+            const curr = new Date(startDay);
+            curr.setDate(startDay.getDate() + i);
+
+            const cell = document.createElement('div');
+            cell.className = 'cell';
+            if (curr.getMonth() !== month) cell.classList.add('dim');
+            if (curr.toDateString() === new Date().toDateString()) cell.classList.add('today');
+
+            const lunar = getLunarText(curr);
+            
+            cell.innerHTML = `
+                <span class="solar-day">${curr.getDate()}</span>
+                <span class="lunar-day">${lunar}</span>
+            `;
+            grid.appendChild(cell);
+        }
+    }
+
+    document.getElementById('prevBtn').onclick = () => { viewDate.setMonth(viewDate.getMonth() - 1); render(); };
+    document.getElementById('nextBtn').onclick = () => { viewDate.setMonth(viewDate.getMonth() + 1); render(); };
+
+    render();
+</script>
+</body>
+</html>
