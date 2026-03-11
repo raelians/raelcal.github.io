@@ -76,7 +76,7 @@
                 if (allEvents.some(e => e.m === curr.getMonth() && e.d === curr.getDate())) cell.classList.add('has-event');
                 const newEra = getCorrectNewEra(curr);
                 if (newEra.isNewYear) cell.classList.add('is-new-year');
-                cell.innerHTML = `<span class="solar-num">${curr.getDate()}</span><span class="new-era-num">신 ${newEra.month}.${newEra.day}</span>`;
+                cell.innerHTML = `<span class="solar-num">${curr.getDate()}</span><span class="new-era-num">${newEra.month}.${newEra.day}</span>`;
                 grid.appendChild(cell);
             }
         }
