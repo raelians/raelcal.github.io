@@ -1,28 +1,4 @@
-<style>.post-header{display:none;}#new-era-calendar-root{all:initial;display:block;font-family:'Pretendard',sans-serif;max-width:500px;margin:20px auto;background:#f1f2f6;padding:12px;border-radius:24px}#new-era-calendar-root .calendar{background:#fff;border-radius:20px;box-shadow:0 12px 30px rgb(0 0 0 / .12);overflow:hidden;margin-bottom:15px}#new-era-calendar-root .nav{background:#2f3542;color:#fff;padding:15px 25px;display:flex;flex-direction:column;align-items:center;gap:8px}#new-era-calendar-root .nav-top{display:flex;width:100%;justify-content:space-between;align-items:center}#new-era-calendar-root .nav h2{margin:0;font-size:1.5rem;font-weight:700;color:#fff}#new-era-calendar-root .ah-display{font-size:.95rem;color:#ff4757;font-weight:700;background:rgb(255 255 255 / .1);padding:4px 12px;border-radius:20px}#new-era-calendar-root .nav button{background:rgb(255 255 255 / .15);border:1px solid rgb(255 255 255 / .4);color:#fff;padding:6px 14px;cursor:pointer;border-radius:10px;font-size:.85rem}#new-era-calendar-root .grid{display:grid;grid-template-columns:repeat(7,1fr);padding:15px}#new-era-calendar-root .day-label{text-align:center;font-weight:700;color:#a4b0be;font-size:.85rem;padding-bottom:10px}#new-era-calendar-root .cell{height:85px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;border-radius:12px}#new-era-calendar-root .solar-num{font-size:1.3rem;font-weight:700;color:#2f3542}#new-era-calendar-root .new-era-num{font-size:.85rem;color:#57606f;margin-top:5px}#new-era-calendar-root .has-event::after{content:'';position:absolute;bottom:8px;width:6px;height:6px;background:#ff4757;border-radius:50%}#new-era-calendar-root .grid div:nth-child(7n+1) .solar-num{color:#ff4757}#new-era-calendar-root .grid div:nth-child(7n) .solar-num{color:#1e90ff}#new-era-calendar-root .is-new-year{background:#fff0f0!important}#new-era-calendar-root .dim{opacity:.2}#new-era-calendar-root .today{border:2px solid #2f3542}#new-era-calendar-root .event-list{background:#fff;border-radius:15px;padding:15px 20px;box-shadow:0 4px 15px rgb(0 0 0 / .05)}#new-era-calendar-root .event-list h3{margin:0 0 10px 0;font-size:1rem;color:#2f3542;border-left:4px solid #ff4757;padding-left:10px}#new-era-calendar-root .event-item{font-size:.9rem;color:#57606f;padding:6px 0;border-bottom:1px dashed #eee;display:flex;justify-content:space-between;align-items:center}#new-era-calendar-root .event-item:last-child{border-bottom:none}#new-era-calendar-root .event-date{font-weight:700;color:#2f3542;min-width:90px;font-size:.85rem}#new-era-calendar-root .period-tag{font-size:.75rem;color:#ff4757;border:1px solid #ff4757;padding:1px 5px;border-radius:4px;font-weight:700}</style>
-<div style="border-radius: 16px; box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 15px; height: 160px; margin-bottom: 10px; overflow: hidden; position: relative; width: 100%;"><img id="planner-img" class="PlannerHeader" alt="Planner Header" src="https://images.unsplash.com/photo-1529419412599-7bb870e11810?auto=format&fit=crop&q=80&w=1000" style="filter: brightness(.8); height: 100%; object-fit: cover; width: 100%;" /><div style="bottom: 15px; color: white; left: 20px; position: absolute; text-shadow: rgba(0, 0, 0, 0.5) 0px 2px 4px;"><h1 style="font-size: 1.5rem; font-weight: 800; margin: 0px;">라엘리안 aH <span id="now-year"></span>.<span id="now-month"></span>-<span id="now-day"></span> 달력</h1><p style="font-size: 0.85rem; margin: 0px; opacity: 0.9;">8월 6일이 신년이며 라엘리안에게 새해가 됩니다.</p></div></div>
-<script>(function() {const imgElement = document.getElementById('planner-img');const month = new Date().getMonth() + 1;let imageUrl = "";if (month >= 3 && month <= 5) {imageUrl = "https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&q=80&w=1000";} else if (month >= 6 && month <= 8) {imageUrl = "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=1000";} else if (month >= 9 && month <= 11) {imageUrl = "https://images.unsplash.com/photo-1507187632231-5beb21a654a2?auto=format&fit=crop&q=80&w=1000";} else {imageUrl = "https://images.unsplash.com/photo-1478265409131-1f65c88f965c?auto=format&fit=crop&q=80&w=1000";}if (imageUrl) {imgElement.src = imageUrl;}})();</script>
-<div id="new-era-calendar-root">
-    <div class="calendar">
-        <div class="nav">
-            <div class="nav-top">
-                <button id="nec-prevMonth">이전</button>
-                <h2 id="nec-monthDisplay"></h2>
-                <button id="nec-nextMonth">다음</button>
-            </div>
-            <div id="nec-ahDisplay" class="ah-display"></div>
-        </div>
-        <div class="grid" id="nec-grid">
-            <div class="day-label">일</div><div class="day-label">월</div><div class="day-label">화</div>
-            <div class="day-label">수</div><div class="day-label">목</div><div class="day-label">금</div><div class="day-label">토</div>
-        </div>
-    </div>
-
-    <div class="event-list" id="nec-eventList">
-        <h3 id="nec-eventTitle">이달의 기념일</h3>
-        <div id="nec-eventItems"></div>
-    </div>
-	<p><br/></p><p><br/></p><p><br/></p><p><br/></p>
-    <script type='text/javascript'>(function() {
+(function() {
         let viewDate = new Date();
 
         function getFirstSundayOfApril(y) { let d = new Date(y, 3, 1); while(d.getDay()!==0) d.setDate(d.getDate()+1); return d.getDate(); }
@@ -124,5 +100,4 @@
         document.getElementById('nec-prevMonth').onclick = function() { viewDate.setMonth(viewDate.getMonth() - 1); render(); };
         document.getElementById('nec-nextMonth').onclick = function() { viewDate.setMonth(viewDate.getMonth() + 1); render(); };
         render();
-    })();</script>
-</div>
+    })();
